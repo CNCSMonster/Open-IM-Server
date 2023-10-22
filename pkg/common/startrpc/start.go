@@ -16,10 +16,12 @@ package startrpc
 
 import (
 	"fmt"
-	"github.com/openimsdk/open-im-server/v3/pkg/common/config"
-	"github.com/openimsdk/open-im-server/v3/pkg/common/discovery_register"
 	"net"
 	"strconv"
+
+
+	"github.com/openimsdk/open-im-server/v3/pkg/common/config"
+	"github.com/openimsdk/open-im-server/v3/pkg/common/discovery_register"
 
 	grpcprometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"google.golang.org/grpc"
@@ -63,11 +65,10 @@ func Start(
 			zookeeper.WithFreq(time.Hour), zookeeper.WithUserNameAndPassword(
 				config.Config.Zookeeper.Username,
 				config.Config.Zookeeper.Password,
-			), zookeeper.WithRoundRobin(), zookeeper.WithTimeout(10), zookeeper.WithLogger(log.NewZkLogger()))*/
-	if err != nil {
+			), zookeeper.WithRoundRobin(), zookeeper.WithTimeout(10), zookeeper.WithLogger(log.NewZkLogger()))*/if err != nil {
 		return utils.Wrap1(err)
 	}
-	//defer zkClient.CloseZK()
+	// defer zkClient.CloseZK()
 	zkClient.AddOption(mw.GrpcClient(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	registerIP, err := network.GetRpcRegisterIP(config.Config.Rpc.RegisterIP)
 	if err != nil {
@@ -108,5 +109,6 @@ func Start(
 			}
 		}
 	}()
+
 	return utils.Wrap1(srv.Serve(listener))
 }
